@@ -6,7 +6,9 @@ import javax.sql.DataSource;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.test.spring.CamelSpringBootRunner;
 import org.apache.camel.test.spring.CamelSpringTestSupport;
+import org.apache.camel.test.spring.EnableRouteCoverage;
 import org.dbunit.DataSourceDatabaseTester;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.dataset.IDataSet;
@@ -14,22 +16,32 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import jason.app.symphony.security.comp.config.SecurityComponentConfig;
 import jason.app.symphony.security.comp.model.LoginRequest;
 import jason.app.symphony.security.comp.model.LoginRequestBody;
 import jason.app.symphony.security.comp.model.LoginResponse;
 
-
+@RunWith(CamelSpringBootRunner.class)
+@SpringBootTest(classes = SecurityApplication.class,
+    properties = "greeting = Hello foo")
+@EnableRouteCoverage
 public class SecurityComponentTest extends CamelSpringTestSupport {
 	 private IDatabaseTester databaseTester;
-	 
+	
+	@Autowired
+	private DataSource securityDataSource;
+	
+	@Autowired
+	private AbstractApplicationContext applicationContext;
+	
 	@Before
 	public void setup() throws Exception {
-		DataSource dataSource = (DataSource) applicationContext.getBean("securityDataSource");
-		databaseTester = new DataSourceDatabaseTester(dataSource);
+		
+		databaseTester = new DataSourceDatabaseTester(securityDataSource);
 		IDataSet dataSet = new FlatXmlDataSetBuilder().build(new File("src/test/resources/dataset.xml"));
         databaseTester.setDataSet( dataSet );
 	// will call default setUpOperation
@@ -45,7 +57,7 @@ public class SecurityComponentTest extends CamelSpringTestSupport {
 	
 
     @Test
-    public void testsecurity() throws Exception {
+    public void testLoginSuccess() throws Exception {
     		LoginRequestBody requestBody = new LoginRequestBody();
     		requestBody.setUsername("jason");
     		requestBody.setPassword("helloworld");
@@ -55,6 +67,20 @@ public class SecurityComponentTest extends CamelSpringTestSupport {
         MockEndpoint mock = getMockEndpoint("mock:result");
         mock.expectedMinimumMessageCount(1);
         assertEquals(true, result.getBody().isAuthenticated());
+        assertMockEndpointsSatisfied();
+    }
+    
+    @Test
+    public void testLoginFail() throws Exception {
+    		LoginRequestBody requestBody = new LoginRequestBody();
+    		requestBody.setUsername("jason");
+    		requestBody.setPassword("wrongpassword");
+    		LoginRequest request = new LoginRequest();
+    		request.setBody(requestBody);
+    		LoginResponse result = template.requestBody("direct:login", request, LoginResponse.class);
+        MockEndpoint mock = getMockEndpoint("mock:result");
+        mock.expectedMinimumMessageCount(1);
+        assertEquals(false, result.getBody().isAuthenticated());
         assertMockEndpointsSatisfied();
     }
 
@@ -71,12 +97,8 @@ public class SecurityComponentTest extends CamelSpringTestSupport {
 
 	@Override
 	protected AbstractApplicationContext createApplicationContext() {
-		System.setProperty("app.datasource.securityDataSource.hibernate.hbm2ddl", "create");
-		System.setProperty("app.datasource.securityDataSource.hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SecurityComponentConfig.class);
-
-
-		return context;
+		
+		return applicationContext;
 	}
+
 }

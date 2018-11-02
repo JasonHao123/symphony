@@ -16,12 +16,7 @@
  */
 package jason.app.symphony.security.route;
 
-import javax.servlet.http.HttpSession;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.http.common.HttpMessage;
 import org.springframework.stereotype.Component;
 
 import jason.app.symphony.security.comp.model.LoginRequest;
@@ -49,28 +44,8 @@ public class LoginRouter extends RouteBuilder {
       .to("direct-vm:login");
             
        from("direct-vm:login")
-       .process(new Processor() {
-
-		@Override
-		public void process(Exchange exchange) throws Exception {
-			// TODO Auto-generated method stub
-			if(exchange.getMessage() instanceof HttpMessage) {
-				HttpSession session = exchange.getIn(HttpMessage.class).getRequest().getSession();
-				System.out.println(session);
-				if(session!=null) {
-					session.setAttribute("hello", "abc");
-					session.setAttribute("world", "cba");
-				}
-			}
-		}
-    	   
-       })
-//       .policy("user")
-       .log("user login begin")
-       .to("log:foo")
        .to("security://login")
-       .to("audit://log")
-       .log("user login end");
+       .to("audit://log");
        
     }
 

@@ -16,36 +16,33 @@
  */
 package jason.app.symphony.touchid.route;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.http.common.HttpMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import jason.app.symphony.security.comp.model.LoginRequest;
-import jason.app.symphony.security.comp.model.LoginResponse;
+import jason.app.symphony.touchid.comp.model.DisableRequest;
+import jason.app.symphony.touchid.comp.model.DisableResponse;
 
 /**
  * A simple Camel REST DSL route with Swagger API documentation.
  * 
  */
 @Component
-public class TouchIDRouter extends RouteBuilder {
+public class PreLoginDisableRouter extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
 
-       rest("/configure").description("Login service")
+       rest("/disable").description("Login service")
       .consumes("application/json")
       .produces("application/json")
       .get().description("perform login")
-     // .type(LoginRequest.class).description("login request")
-     // .outType(LoginResponse.class).description("login response")
+      .type(DisableRequest.class).description("login request")
+      .outType(DisableResponse.class).description("login response")
       .responseMessage()
       	.code(200).message("User successfully logged in returned")
       	.code(403).message("Access denied!").endResponseMessage()

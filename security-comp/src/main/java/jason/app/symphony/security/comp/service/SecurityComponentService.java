@@ -4,4 +4,5 @@ import org.apache.camel.Exchange;
 
 public interface SecurityComponentService {
 	public void login(Exchange exchange);
+	public void setPartyId(Exchange exchange);
 }

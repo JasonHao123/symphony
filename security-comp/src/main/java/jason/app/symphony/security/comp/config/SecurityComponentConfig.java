@@ -1,26 +1,37 @@
 package jason.app.symphony.security.comp.config;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.cache.ehcache.EhCacheFactoryBean;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.acls.AclPermissionCacheOptimizer;
 import org.springframework.security.acls.AclPermissionEvaluator;
 import org.springframework.security.acls.domain.AclAuthorizationStrategy;
@@ -47,57 +58,86 @@ import jason.app.symphony.security.comp.service.SecurityComponentService;
 import jason.app.symphony.security.comp.service.impl.CustomUserDetailsService;
 import jason.app.symphony.security.comp.service.impl.JpaMutableAclService;
 import jason.app.symphony.security.comp.service.impl.SecurityComponentServiceImpl;
-import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-//@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-@EntityScan(basePackages = "jason.app.symphony.security.comp.entity")
 @EnableTransactionManagement
+@EnableJpaRepositories(
+		entityManagerFactoryRef = "securityEntityManager", 
+		transactionManagerRef = "securityTransactionManager", 
+		basePackages = "jason.app.symphony.security.comp.entity"
+)
 public class SecurityComponentConfig {
+	
+	/**
+	 * Security datasource definition.
+	 * 
+	 * @return datasource.
+	 */
+	@Bean(name="securityDataSource")
+	@Primary
+	@ConfigurationProperties(prefix = "spring.security.datasource")
+	public DataSource securityDataSource() {
+		return DataSourceBuilder
+					.create()
+					.build();
+	}
+
+	/**
+	 * Entity manager definition. 
+	 *  
+	 * @param builder an EntityManagerFactoryBuilder.
+	 * @return LocalContainerEntityManagerFactoryBean.
+	 */
+	@Bean(name = "securityEntityManager")
+	@Primary
+	public LocalContainerEntityManagerFactoryBean securityEntityManagerFactory(EntityManagerFactoryBuilder builder,@Qualifier("securityDataSource") DataSource securityDataSource) {
+		return builder
+					.dataSource(securityDataSource)
+					.properties(hibernateProperties())
+					.packages("jason.app.symphony.security.comp.entity")
+					.persistenceUnit("securityPU")
+					.build();
+	}
+
+	/**
+	 * @param entityManagerFactory
+	 * @return
+	 */
+	@Bean(name = "securityTransactionManager")
+	@Primary
+	public PlatformTransactionManager securityTransactionManager(@Qualifier("securityEntityManager") EntityManagerFactory entityManagerFactory) {
+		return new JpaTransactionManager(entityManagerFactory);
+	}
+
+	private Map<String, Object> hibernateProperties() {
+
+		Resource resource = new ClassPathResource("security-hibernate.properties");
+		try {
+			Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+			return properties.entrySet().stream()
+											.collect(Collectors.toMap(
+														e -> e.getKey().toString(),
+														e -> e.getValue())
+													);
+		} catch (IOException e) {
+			return new HashMap<String, Object>();
+		}
+	}
+	
+	@Bean
+	public AffirmativeBased accessDecisionManager() {
+		List<AccessDecisionVoter<? extends Object>> voters = new ArrayList<AccessDecisionVoter<? extends Object>>();
+		voters.add(new RoleVoter());
+		AffirmativeBased accessDecisionManager = new AffirmativeBased(voters);
+		accessDecisionManager.setAllowIfAllAbstainDecisions(true);
+		return accessDecisionManager;
+	}
 	
 	@Bean
 	public SecurityComponentService securityComponentService() {
 		SecurityComponentServiceImpl impl = new SecurityComponentServiceImpl();
 		return impl;
 		
-	}
-	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Value("${app.datasource.securityDataSource.hibernate.hbm2ddl}") String hbm2ddl,
-			@Value("${app.datasource.securityDataSource.hibernate.dialect}") String dialect) {
-		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-		em.setDataSource(securityDataSource());
-		em.setPackagesToScan(new String[] { "jason.app.symphony.security.comp.entity" });
-
-		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-		em.setJpaVendorAdapter(vendorAdapter);
-		Properties properties = new Properties();
-		properties.setProperty("hibernate.hbm2ddl.auto", hbm2ddl);
-		properties.setProperty("hibernate.dialect", dialect);
-		em.setJpaProperties(properties);
-
-		return em;
-	}
-
-	@Bean
-	@Primary
-	@ConfigurationProperties("app.datasource.securityDataSource")
-	public DataSourceProperties securityDataSourceProperties() {
-		return new DataSourceProperties();
-	}
-
-	@Bean
-	@Primary
-	@ConfigurationProperties("app.datasource.securityDataSource.configuration")
-	public DataSource securityDataSource() {
-		return securityDataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
-	}
-
-	@Bean
-	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(emf);
-
-		return transactionManager;
 	}
 
 	@Bean
@@ -167,8 +207,8 @@ public class SecurityComponentConfig {
 	}
 
 	@Bean
-	public LookupStrategy lookupStrategy() {
-		return new BasicLookupStrategy(securityDataSource(), aclCache(), aclAuthorizationStrategy(),
+	public LookupStrategy lookupStrategy(@Qualifier("securityDataSource") DataSource securityDataSource) {
+		return new BasicLookupStrategy(securityDataSource, aclCache(), aclAuthorizationStrategy(),
 				new ConsoleAuditLogger());
 	}
 

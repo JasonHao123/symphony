@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>      
+	<!--Salary Table -->
+	<SALES_ORDER ID="123" AMOUNT="155.5" PARTY_ID="jason" CREATE_DATE="2018-10-01 00:00:00" />
+
+</dataset>

@@ -55,5 +55,8 @@
 		<module>touchid</module>
 
 		<module>touchid-comp</module>
-	</modules>
+    <module>notification-comp</module>
+    <module>order</module>
+    <module>order-comp</module>
+  </modules>
 </project>

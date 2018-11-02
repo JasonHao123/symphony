@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 @Override
 	    protected void configure(HttpSecurity http) throws Exception {
-	        http.authorizeRequests().mvcMatchers("/configure").permitAll().anyRequest().authenticated().and().x509().subjectPrincipalRegex("CN=(.*?)(?:,|$)").userDetailsService(userDetailsService());
+	        http.authorizeRequests().mvcMatchers("/api-doc","/configure","/status","/disable").permitAll().anyRequest().authenticated().and().x509().subjectPrincipalRegex("CN=(.*?)(?:,|$)").userDetailsService(userDetailsService());
 	    }
 
 	    @Bean
