@@ -17,6 +17,9 @@ public class Tenant {
 	
 	@Column
 	private String name;
+	
+	@Column
+	private String schemaName;
 
 	public Long getId() {
 		return id;
@@ -41,6 +44,15 @@ public class Tenant {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public String getSchemaName() {
+		return schemaName;
+	}
+
+	public void setSchemaName(String schemaName) {
+		this.schemaName = schemaName;
+	}
+
 	
 	
 }

@@ -2,33 +2,33 @@ package jason.app.symphony.security.comp.filter;
 
 import java.io.IOException;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import jason.app.symphony.commons.http.model.User;
+import jason.app.symphony.security.comp.entity.Tenant;
+import jason.app.symphony.security.comp.repository.TenantRepository;
 
-public class TenantDetectionFilter implements Filter{
+public class TenantDetectionFilter extends OncePerRequestFilter{
+
+	@Autowired
+	private TenantRepository repo;
+
 
 	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-		// TODO Auto-generated method stub
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = null;
 		if(auth!=null) {
@@ -42,19 +42,16 @@ public class TenantDetectionFilter implements Filter{
 			
 			String host = ((HttpServletRequest)request).getHeader("Host");
 			System.out.println(host);
-			if("www.xxxx.com:8080".equals(host)) {
-				user.setSchema("1");
+			Tenant tenant = repo.findFirstByDomain(host);
+			if(tenant!=null) {
+				user.setSchema(tenant.getSchemaName());
 			}else {
 				user.setSchema("");
 			}
 		}
-		chain.doFilter(request, response);
-	}
-
-	@Override
-	public void destroy() {
-		// TODO Auto-generated method stub
+		filterChain.doFilter(request, response);
 		
 	}
+
 
 }

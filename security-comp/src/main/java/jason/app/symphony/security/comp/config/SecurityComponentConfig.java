@@ -57,6 +57,7 @@ import jason.app.symphony.security.comp.dao.AclDao;
 import jason.app.symphony.security.comp.dao.UserDao;
 import jason.app.symphony.security.comp.dao.impl.AclDaoJpa;
 import jason.app.symphony.security.comp.dao.impl.UserDaoJpa;
+import jason.app.symphony.security.comp.filter.TenantDetectionFilter;
 import jason.app.symphony.security.comp.service.SecurityComponentService;
 import jason.app.symphony.security.comp.service.impl.CustomUserDetailsService;
 import jason.app.symphony.security.comp.service.impl.JpaMutableAclService;
@@ -248,8 +249,8 @@ public class SecurityComponentConfig extends WebMvcConfigurerAdapter{
         registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
     }
 
-//    @Bean
-//    public TenantDetectionInterceptor getTenantDetector() {
-//         return new TenantDetectionInterceptor();
-//    }	
+    @Bean
+    public TenantDetectionFilter getTenantDetector() {
+         return new TenantDetectionFilter();
+    }	
 }
