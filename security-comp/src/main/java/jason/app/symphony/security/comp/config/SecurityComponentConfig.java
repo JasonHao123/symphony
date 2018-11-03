@@ -49,6 +49,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import jason.app.symphony.security.comp.dao.AclDao;
 import jason.app.symphony.security.comp.dao.UserDao;
@@ -61,12 +64,13 @@ import jason.app.symphony.security.comp.service.impl.SecurityComponentServiceImp
 
 @Configuration
 @EnableTransactionManagement
+@EnableWebMvc
 @EnableJpaRepositories(
 		entityManagerFactoryRef = "securityEntityManager", 
 		transactionManagerRef = "securityTransactionManager", 
-		basePackages = "jason.app.symphony.security.comp.entity"
+		basePackages = "jason.app.symphony.security.comp.repository"
 )
-public class SecurityComponentConfig {
+public class SecurityComponentConfig extends WebMvcConfigurerAdapter{
 	
 	/**
 	 * Security datasource definition.
@@ -230,4 +234,22 @@ public class SecurityComponentConfig {
 		return provider;
 	}
 	
+//	@Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(getTenantDetector())
+//        .addPathPatterns("/**")
+//        //.excludePathPatterns("/resources/**", "/login")
+//        ;
+//
+//    }
+	
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
+    }
+
+//    @Bean
+//    public TenantDetectionInterceptor getTenantDetector() {
+//         return new TenantDetectionInterceptor();
+//    }	
 }

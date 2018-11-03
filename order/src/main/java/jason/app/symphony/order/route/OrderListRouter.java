@@ -16,16 +16,11 @@
  */
 package jason.app.symphony.order.route;
 
-import javax.servlet.http.HttpSession;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.http.common.HttpMessage;
 import org.springframework.stereotype.Component;
 
-import jason.app.symphony.security.comp.model.LoginRequest;
-import jason.app.symphony.security.comp.model.LoginResponse;
+import jason.app.symphony.order.comp.model.OrderListRequest;
+import jason.app.symphony.order.comp.model.OrderListResponse;
 
 /**
  * A simple Camel REST DSL route with Swagger API documentation.
@@ -41,15 +36,16 @@ public class OrderListRouter extends RouteBuilder {
       .consumes("application/json")
       .produces("application/json")
       .post().description("perform login")
-      .type(LoginRequest.class).description("login request")
-      .outType(LoginResponse.class).description("login response")
+      .type(OrderListRequest.class).description("login request")
+      .outType(OrderListResponse.class).description("login response")
       .responseMessage()
       	.code(200).message("User successfully logged in returned")
       	.code(403).message("Access denied!").endResponseMessage()
       .to("direct-vm:list");
             
        from("direct-vm:list")
-       .to("security:setPartyId")
+       .setProperty("CUST_ID",simple("jason"))
+     //  .to("security:setPartyId")
        .to("order://list")
        .to("audit://log");
        

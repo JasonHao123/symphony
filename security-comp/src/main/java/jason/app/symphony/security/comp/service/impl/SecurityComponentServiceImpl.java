@@ -7,11 +7,11 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import jason.app.symphony.commons.http.model.User;
 import jason.app.symphony.security.comp.constant.SecurityConstant;
 import jason.app.symphony.security.comp.model.LoginRequest;
 import jason.app.symphony.security.comp.model.LoginResponse;
 import jason.app.symphony.security.comp.model.LoginResponseBody;
-import jason.app.symphony.security.comp.model.User;
 import jason.app.symphony.security.comp.service.SecurityComponentService;
 
 

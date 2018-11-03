@@ -24,7 +24,7 @@ public class OrderComponentServiceImpl implements OrderComponentService {
 	@Override
 	public void list(Exchange exchange) {
 		String customerId = (String) exchange.getProperty("CUST_ID");
-		OrderListRequest request = (OrderListRequest) exchange.getIn().getBody();
+		OrderListRequest request = (OrderListRequest) exchange.getIn().getBody(OrderListRequest.class);
 		OrderListResponse response = new OrderListResponse();
 		OrderListResponseBody responseBody = new OrderListResponseBody(); 
 		response.setBody(responseBody);

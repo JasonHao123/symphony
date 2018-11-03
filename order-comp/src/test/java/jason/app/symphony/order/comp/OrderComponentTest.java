@@ -1,6 +1,8 @@
 package jason.app.symphony.order.comp;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -15,12 +17,18 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import jason.app.symphony.commons.http.model.User;
 import jason.app.symphony.order.comp.model.OrderListRequest;
 import jason.app.symphony.order.comp.model.OrderListRequestBody;
 import jason.app.symphony.order.comp.model.OrderListResponse;
@@ -39,6 +47,17 @@ public class OrderComponentTest extends CamelSpringTestSupport {
 	
 	@Autowired
 	private AbstractApplicationContext applicationContext;
+	
+	@BeforeClass
+	public static void setupOnce() {
+        
+    		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
+		User user = new User("anonymous","","anonymous",false,false,false,false,authorities);
+		user.setSchema("1");
+		SecurityContextHolder.getContext().setAuthentication(new AnonymousAuthenticationToken("hello", user, authorities));
+
+	}
 
 	@Before
 	public void setup() throws Exception {

@@ -11,9 +11,6 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -22,17 +19,13 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.zaxxer.hikari.HikariDataSource;
-
+import jason.app.symphony.commons.datasource.UserSchemaAwareRoutingDataSource;
 import jason.app.symphony.order.comp.service.OrderComponentService;
 import jason.app.symphony.order.comp.service.impl.OrderComponentServiceImpl;
 
@@ -53,10 +46,21 @@ public class OrderComponentConfig {
 	 * 
 	 * @return datasource.
 	 */
-	@Bean(name="orderDataSource")
+//	@Bean(name="orderDataSource")
+//	@ConfigurationProperties(prefix = "spring.order.datasource")
+//	public DataSource orderDataSource() {
+//		return DataSourceBuilder.create().build();
+//	}
+	
+	@Bean(name="orderDataSourceProperties")
 	@ConfigurationProperties(prefix = "spring.order.datasource")
-	public DataSource orderDataSource() {
-		return DataSourceBuilder.create().build();
+	public Map<String,String> orderDataSourceProperties() {
+		return new HashMap();
+	}
+	
+	@Bean(name="orderDataSource")
+	public DataSource orderDataSource(@Value("${spring.order.datasource.url}") String url,@Qualifier("orderDataSourceProperties") Map<String,String> props) {
+		return new UserSchemaAwareRoutingDataSource(url,props);
 	}
 
 	/**

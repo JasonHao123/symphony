@@ -42,7 +42,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 			boolean credentialsNonExpired = true;
 			boolean accountNonLocked = true;
 			
-			return new jason.app.symphony.security.comp.model.User(
+			return new jason.app.symphony.commons.http.model.User(
 					domainUser.getUsername(), 
 					domainUser.getPassword().replace("{SHA}", ""),
 					domainUser.getPartyId(),

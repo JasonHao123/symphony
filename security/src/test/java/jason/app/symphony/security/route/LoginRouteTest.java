@@ -18,6 +18,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import jason.app.symphony.security.SecurityApplication;
@@ -30,6 +32,7 @@ import jason.app.symphony.security.comp.model.LoginResponseBody;
 @SpringBootTest(classes = SecurityApplication.class,
     properties = "greeting = Hello foo")
 @EnableRouteCoverage
+@EnableAutoConfiguration(exclude=DataSourceAutoConfiguration.class)
 //@MockEndpoints("security:login") 
 public class LoginRouteTest {
 	

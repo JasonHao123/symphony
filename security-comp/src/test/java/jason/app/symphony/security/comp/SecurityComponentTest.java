@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
 
 import jason.app.symphony.security.comp.model.LoginRequest;
@@ -29,6 +30,7 @@ import jason.app.symphony.security.comp.model.LoginResponse;
 @SpringBootTest(classes = SecurityApplication.class,
     properties = "greeting = Hello foo")
 @EnableRouteCoverage
+@Configuration
 public class SecurityComponentTest extends CamelSpringTestSupport {
 	 private IDatabaseTester databaseTester;
 	
