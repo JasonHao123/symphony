@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import jason.app.symphony.commons.http.model.User;
+import jason.app.symphony.commons.http.model.SymphonyUser;
 import jason.app.symphony.security.comp.entity.Tenant;
 import jason.app.symphony.security.comp.repository.TenantRepository;
 
@@ -30,12 +30,12 @@ public class TenantDetectionFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = null;
+		SymphonyUser user = null;
 		if(auth!=null) {
 			if(auth.getPrincipal() instanceof AnonymousAuthenticationToken) {
-				user = (User) ((AnonymousAuthenticationToken)auth.getPrincipal()).getPrincipal();
-			}else if(auth.getPrincipal() instanceof User) {
-				user = (User) auth.getPrincipal();
+				user = (SymphonyUser) ((AnonymousAuthenticationToken)auth.getPrincipal()).getPrincipal();
+			}else if(auth.getPrincipal() instanceof SymphonyUser) {
+				user = (SymphonyUser) auth.getPrincipal();
 			}
 		}
 		if(user!=null) {

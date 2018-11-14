@@ -28,7 +28,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import jason.app.symphony.commons.http.model.User;
+import jason.app.symphony.commons.http.model.SymphonyUser;
 import jason.app.symphony.order.comp.model.OrderListRequest;
 import jason.app.symphony.order.comp.model.OrderListRequestBody;
 import jason.app.symphony.order.comp.model.OrderListResponse;
@@ -53,7 +53,7 @@ public class OrderComponentTest extends CamelSpringTestSupport {
         
     		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
-		User user = new User("anonymous","","anonymous",false,false,false,false,authorities);
+		SymphonyUser user = new SymphonyUser("anonymous","","anonymous",false,false,false,false,authorities);
 		user.setSchema("1");
 		SecurityContextHolder.getContext().setAuthentication(new AnonymousAuthenticationToken("hello", user, authorities));
 

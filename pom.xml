@@ -49,16 +49,10 @@
 	</dependencyManagement>
 	<modules>
 		<module>commons</module>
-<!-- 		<module>security-comp</module>
-		<module>audit-comp</module>
-		<module>security</module>
-		<module>touchid</module>
-
-		<module>touchid-comp</module>
-	    <module>notification-comp</module>
-	    <module>order</module>
-	    <module>order-comp</module> -->
 	    <module>tenant</module>
 	    <module>archetype</module>
+    <module>security</module>
+    <module>module</module>
+    <module>boa-manager</module>
   </modules>
 </project>

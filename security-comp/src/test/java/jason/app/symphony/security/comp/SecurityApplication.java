@@ -14,7 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import jason.app.symphony.commons.http.model.User;
+import jason.app.symphony.commons.http.model.SymphonyUser;
 import jason.app.symphony.security.comp.config.SecurityComponentConfig;
 
 
@@ -23,10 +23,10 @@ import jason.app.symphony.security.comp.config.SecurityComponentConfig;
 public class SecurityApplication {
 
 	@Bean
-	public User user() {
+	public SymphonyUser user() {
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
-		User user = new User("anonymous","","anonymous",false,false,false,false,authorities);
+		SymphonyUser user = new SymphonyUser("anonymous","","anonymous",false,false,false,false,authorities);
 		user.setSchema("");
 	//	AnonymousAuthenticationToken token = new AnonymousAuthenticationToken("23424234", user, authorities);
 	//	SecurityContextHolder.getContext().setAuthentication(token);

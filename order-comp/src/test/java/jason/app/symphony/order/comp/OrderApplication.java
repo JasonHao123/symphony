@@ -14,7 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import jason.app.symphony.commons.http.model.User;
+import jason.app.symphony.commons.http.model.SymphonyUser;
 import jason.app.symphony.order.comp.config.OrderComponentConfig;
 
 

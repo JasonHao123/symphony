@@ -4,10 +4,10 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public class User extends org.springframework.security.core.userdetails.User {
+public class SymphonyUser extends org.springframework.security.core.userdetails.User {
 	private String partyId;
 	private String schema;
-	public User(String username, String password,String partyId, boolean enabled, boolean accountNonExpired,
+	public SymphonyUser(String username, String password,String partyId, boolean enabled, boolean accountNonExpired,
 			boolean credentialsNonExpired, boolean accountNonLocked,
 			Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);

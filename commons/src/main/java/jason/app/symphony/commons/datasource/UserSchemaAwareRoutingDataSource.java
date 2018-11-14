@@ -18,7 +18,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-import jason.app.symphony.commons.http.model.User;
+import jason.app.symphony.commons.http.model.SymphonyUser;
 
 public class UserSchemaAwareRoutingDataSource extends AbstractDataSource {
 	private String url;
@@ -44,10 +44,10 @@ public class UserSchemaAwareRoutingDataSource extends AbstractDataSource {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String schema = "";
 		if(auth!=null && auth.getPrincipal()!=null) {
-			if(auth.getPrincipal() instanceof User) {
-				schema = ((User)auth.getPrincipal()).getSchema();
+			if(auth.getPrincipal() instanceof SymphonyUser) {
+				schema = ((SymphonyUser)auth.getPrincipal()).getSchema();
 			}else if(auth.getPrincipal() instanceof AnonymousAuthenticationToken) {
-				schema = ((User)((AnonymousAuthenticationToken)auth.getPrincipal()).getPrincipal()).getSchema();
+				schema = ((SymphonyUser)((AnonymousAuthenticationToken)auth.getPrincipal()).getPrincipal()).getSchema();
 			}
 		}
 		try {

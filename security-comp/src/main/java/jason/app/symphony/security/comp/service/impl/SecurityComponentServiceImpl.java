@@ -7,7 +7,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import jason.app.symphony.commons.http.model.User;
+import jason.app.symphony.commons.http.model.SymphonyUser;
 import jason.app.symphony.security.comp.constant.SecurityConstant;
 import jason.app.symphony.security.comp.model.LoginRequest;
 import jason.app.symphony.security.comp.model.LoginResponse;
@@ -42,8 +42,8 @@ public class SecurityComponentServiceImpl implements SecurityComponentService {
 	@Override
 	public void setPartyId(Exchange exchange) {
 		Authentication principal = SecurityContextHolder.getContext().getAuthentication() ;
-		if(principal.getPrincipal() instanceof User) {
-			User currentUser = (User) ((Authentication) principal).getPrincipal();
+		if(principal.getPrincipal() instanceof SymphonyUser) {
+			SymphonyUser currentUser = (SymphonyUser) ((Authentication) principal).getPrincipal();
 			exchange.setProperty(SecurityConstant.CUST_ID, currentUser.getPartyId());
 		}else {
 			throw new RuntimeException("customer inforamtion is not valid");
