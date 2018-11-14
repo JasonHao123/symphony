@@ -60,5 +60,5 @@
 	    <module>order-comp</module> -->
 	    <module>tenant</module>
 	    <module>archetype</module>
-	</modules>
+  </modules>
 </project>

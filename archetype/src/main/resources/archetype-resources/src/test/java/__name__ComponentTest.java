@@ -77,7 +77,7 @@ public class ${name}ComponentTest extends CamelTestSupport {
 	
     @Test
     public void test${name}() throws Exception {
-		List<Tenant> result = (List<Tenant>) this.template.requestBody("direct:start","hello");
+		List<${name}> result = (List<${name}>) this.template.requestBody("direct:start","hello");
 		assertNotNull(result);
 		assertEquals(2, result.size());
 		assertEquals("jason",result.get(0).getName());

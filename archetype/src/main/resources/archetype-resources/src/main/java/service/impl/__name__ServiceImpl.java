@@ -26,7 +26,7 @@ public class ${name}ServiceImpl implements ${name}Service {
 
 	@Override
 	public void list(Exchange exchange) {
-		List<${package}.model.Tenant> result = new ArrayList<${package}.model.Tenant>();
+		List<${package}.model.${name}> result = new ArrayList<${package}.model.${name}>();
 		for(${name} entity:repo.findAll()) {
 			${package}.model.${name} model = new ${package}.model.${name}() ;
 			model.setId(entity.getId());

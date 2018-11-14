@@ -33,11 +33,11 @@ import ${package}.service.impl.${name}ServiceImpl;
 @Configuration
 @DependsOn("transactionManager")
 @EnableJpaRepositories(entityManagerFactoryRef = "${scheme}EntityManager", transactionManagerRef = "transactionManager", basePackages = "${package}.repository")
-@EnableConfigurationProperties(TenantDatasourceProperties.class)
+@EnableConfigurationProperties(${name}DatasourceProperties.class)
 public class ${name}ComponentConfig {
 
 	@Bean
-	public ${name}Service tenantService() {
+	public ${name}Service ${scheme}Service() {
 		return new ${name}ServiceImpl();
 	}
 
@@ -65,12 +65,12 @@ public class ${name}ComponentConfig {
 
 		 AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
 		 xaDataSource.setXaDataSource(dataSource);
-		 xaDataSource.setUniqueResourceName(tenantDatasourceProperties.getResourceName());
+		 xaDataSource.setUniqueResourceName(${scheme}DatasourceProperties.getResourceName());
 		 return xaDataSource;
 	}
 	
 
-	private XADataSource createHsqlDBDataSource(TenantDatasourceProperties props) throws SQLException {
+	private XADataSource createHsqlDBDataSource(${name}DatasourceProperties props) throws SQLException {
 		// TODO Auto-generated method stub
 		JDBCXADataSource dataSource = new JDBCXADataSource();
 		dataSource.setUrl(props.getUrl());
@@ -81,13 +81,13 @@ public class ${name}ComponentConfig {
 	}
 
 
-	private XADataSource createDerbyDataSource(TenantDatasourceProperties props) {
+	private XADataSource createDerbyDataSource(${name}DatasourceProperties props) {
 		
 		return null;
 	}
 
 
-	private XADataSource createMySQLDataSource(TenantDatasourceProperties props) {
+	private XADataSource createMySQLDataSource(${name}DatasourceProperties props) {
 		return null;
 	}
 
