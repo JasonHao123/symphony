@@ -1,0 +1,42 @@
+<view class="doommview">
+    <block wx:for="{{doommData}}" wx:key="id">
+        <view bindtap="playSound" wx:if="{{item.display}}" class="aon" style="animation: first {{item.time}}s linear forwards;top:{{item.top}}%;color:{{item.color}};">
+            <icon type="success" size="25"/> {{item.text}}
+        </view>
+    </block>
+</view>
+<view wx:for="{{message}}" wx:for-item="i" wx:key="test">
+        <view class="padding clearfix" wx:if="{{i.me}}">
+            <image class="right-Avatar padding_half" src="{{userInfo.avatarUrl}}"></image>
+            <view class="right-Triangle"></view>
+            <view class="right-message padding_half">
+                <text wx:if="{{i.text}}">{{i.text}}</text>
+                <image wx:if="{{i.imgList}}" style="max-width:150px;max-height:120px" src="{{i.imgList}}"></image>
+                <map wx:if="{{i.map}}" style="width: 220px; height: 160px;"
+                    latitude="{{latitude}}"
+                    longitude="{{longitude}}"
+                    scale="16"
+                    markers="{{markers}}"
+                    covers="{{covers}}"
+                    >
+                </map>
+            </view>
+        </view>
+        <view class="padding clearfix" wx:if="{{!i.me}}">
+            <image class="left-Avatar padding_half" src="{{i.avatar}}"></image>
+            <view class="left-Triangle"></view>
+            <view data-voice='{{i.voiceLink}}' bindtap='playVoice' data-parent="{{i.parentId?i.parentId:i.id}}" bindtouchstart='startRecord' bindtouchend='endRecord' class="left-message padding_half">
+                <text>{{i.content}}</text>
+            </view>
+        </view>
+    </view>
+    <view class="weui-icon_success"></view>
+  
+
+
+<button  wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="getUserInfo" ><image mode="scaleToFill" class="post" src="../../images/microphone1.png"></image></button>
+
+<block wx:else>
+<image class="{{recording?'postActive':'post'}}" mode="scaleToFill" src="../../images/microphone1.png" bindtouchstart='startRecord' bindtouchend='endRecord'></image>
+  
+</block>

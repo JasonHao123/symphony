@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>      
+	<!--Salary Table -->
+	<TENANT ID="11" NAME="jason"  />
+	<TENANT ID="22" NAME="hello"  />
+</dataset>

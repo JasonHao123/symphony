@@ -1,0 +1,42 @@
+   <i-tag 
+        wx:for="{{tags}}" 
+        wx:key="{{index}}"
+        bindchange="onChange" 
+        checkable="{{true}}" 
+        name="{{index}}" 
+        color="{{item.color}}" 
+        checked="{{item.checked}}" 
+        type="border"
+        style="margin-right:5px;">
+        {{item.name}}
+    </i-tag>
+
+<i-card  bindtap="goPage"  full wx:for="{{items}}" 
+         wx:key="{{index}}" data-title="{{item.title}}" data-id="{{item.id}}"
+         title="{{item.authorName}}" extra="{{item.numberOfReply}}" thumb="{{item.avatar}}">
+    <view slot="content">
+    
+    {{item.title}}
+    </view>
+    <view slot="footer">   <i-tag 
+        wx:for="{{item.tags}}" 
+        wx:key="{{index}}"
+        checkable="{{true}}" 
+        name="{{index}}" 
+        color="{{item.color}}" 
+        checked="{{item.checked}}" 
+        type="border"
+        style="margin-right:5px;">
+        {{item.name}}
+    </i-tag></view>
+</i-card>
+<!--index.wxml-->
+
+<button  wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="getUserInfo" ><image mode="scaleToFill" class="post" src="../../images/microphone1.png"></image></button>
+
+<block wx:else>
+<image class="{{recording?'postActive':'post'}}" mode="scaleToFill" src="../../images/microphone1.png" bindtouchstart='startRecord' bindtouchend='endRecord'></image>
+  
+</block>
+
+<i-load-more loading="{{ loading }}" />

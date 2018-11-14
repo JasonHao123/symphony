@@ -1,0 +1,16 @@
+{
+  "navigationBarTitleText": "有聊",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "i-card": "../../components/card/index",
+    "i-tag": "../../components/tag/index",
+    "i-button": "../../components/button/index",
+    "i-load-more": "../../components/load-more/index",
+    "i-input": "../../components/input/index",
+      "i-swipeout": "../../components/swipeout/index",
+      "i-cell-group": "../../components/cell-group/index",
+      "i-cell": "../../components/cell/index",
+      "i-icon": "../../components/icon/index",
+      "i-action-sheet": "../../components/action-sheet/index"
+  }
+}
