@@ -26,16 +26,16 @@ public class UserLogin {
 	private String userId;
 	
 	@Column
-	private Boolean accountExpired;
+	private String accountNonExpired;
 	
 	@Column
-	private Boolean enabled;
+	private String enabled;
 	
 	@Column
-	private Boolean credentialExpired;
+	private String credentialNonExpired;
 	
 	@Column
-	private Boolean locked;
+	private String nonLocked;
 	
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
@@ -66,13 +66,7 @@ public class UserLogin {
 		this.password = password;
 	}
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
+	
 
 	public Date getCreateDate() {
 		return createDate;
@@ -106,30 +100,38 @@ public class UserLogin {
 		this.userId = userId;
 	}
 
-	public Boolean getAccountExpired() {
-		return accountExpired;
+	public String getEnabled() {
+		return enabled;
 	}
 
-	public void setAccountExpired(Boolean accountExpired) {
-		this.accountExpired = accountExpired;
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
 	}
 
-	public Boolean getCredentialExpired() {
-		return credentialExpired;
+	public String getAccountNonExpired() {
+		return accountNonExpired;
 	}
 
-	public void setCredentialExpired(Boolean credentialExpired) {
-		this.credentialExpired = credentialExpired;
+	public void setAccountNonExpired(String accountNonExpired) {
+		this.accountNonExpired = accountNonExpired;
 	}
 
-	public Boolean getLocked() {
-		return locked;
+	public String getCredentialNonExpired() {
+		return credentialNonExpired;
 	}
 
-	public void setLocked(Boolean locked) {
-		this.locked = locked;
+	public void setCredentialNonExpired(String credentialNonExpired) {
+		this.credentialNonExpired = credentialNonExpired;
 	}
-	
+
+	public String getNonLocked() {
+		return nonLocked;
+	}
+
+	public void setNonLocked(String nonLocked) {
+		this.nonLocked = nonLocked;
+	}
+
 	
 	
 }

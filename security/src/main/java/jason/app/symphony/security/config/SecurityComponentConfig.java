@@ -121,7 +121,7 @@ public class SecurityComponentConfig {
 	@Bean(name = "securityEntityManager")
 	public LocalContainerEntityManagerFactoryBean securityEntityManagerFactory(EntityManagerFactoryBuilder builder,@Qualifier("securityDataSource") DataSource securityDataSource) {
 		return builder.dataSource(securityDataSource).properties(hibernateProperties())
-				.packages("jason.app.symphony.security.entity").persistenceUnit(securityDatasourceProperties.getPersistenceUnitName()).build();
+				.packages("jason.app.symphony.security.entity").persistenceUnit(securityDatasourceProperties.getPersistenceUnitName()).jta(true).build();
 	}
 
 	private Map<String, Object> hibernateProperties() {

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>      
 	<!--Salary Table -->
-	<UserLogin USERNAME="jason" PASSWORD="test" userId="jason" accountExpired="0" enabled="1" credentialExpired="0" locked="0"   />
+	<UserLogin USERNAME="jason" PASSWORD="test" userId="jason" accountNonExpired="0" enabled="1" credentialNonExpired="0" nonLocked="0"   />
 	<Role ID="11" NAME="jason"  />
 	<Permission ID="22" NAME="hello"  />
 </dataset>

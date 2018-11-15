@@ -30,7 +30,7 @@ App({
       close: closeSocket
     }
     that.globalData.socket = wx.connectSocket({
-      url: 'ws://192.168.31.248:8080/gs-guide-websocket',
+      url: 'wss://www.newlife365.cn/gs-guide-websocket',
       header: {
         'Cookie': wx.getStorageSync("sessionCookie")
       }
@@ -88,7 +88,7 @@ App({
   onHide:function() {
     console.log("App hide");
     wx.request({
-      url: 'http://192.168.31.248:8080/logout', //仅为示例，并非真实的接口地址
+      url: 'https://www.newlife365.cn/logout', //仅为示例，并非真实的接口地址
       method: "GET",
       success: function (res) {
         console.log(res)
@@ -111,7 +111,7 @@ App({
         if (res.code) {
           console.log(res.code);
           wx.request({
-            url: 'http://192.168.31.248:8080/security/wxlogin', //仅为示例，并非真实的接口地址
+            url: 'https://www.newlife365.cn/security/wxlogin', //仅为示例，并非真实的接口地址
             method: "POST",
             data: {
               authCode: res.code

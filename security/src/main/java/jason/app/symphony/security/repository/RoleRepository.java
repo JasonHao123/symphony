@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import jason.app.symphony.security.entity.Role;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<Role, String> {
 }

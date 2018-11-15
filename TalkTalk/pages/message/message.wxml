@@ -1,10 +1,10 @@
-<view class="doommview">
+<!-- <view class="doommview">
     <block wx:for="{{doommData}}" wx:key="id">
         <view bindtap="playSound" wx:if="{{item.display}}" class="aon" style="animation: first {{item.time}}s linear forwards;top:{{item.top}}%;color:{{item.color}};">
             <icon type="success" size="25"/> {{item.text}}
         </view>
     </block>
-</view>
+</view> -->
 <view wx:for="{{message}}" wx:for-item="i" wx:key="test">
         <view class="padding clearfix" wx:if="{{i.me}}">
             <image class="right-Avatar padding_half" src="{{userInfo.avatarUrl}}"></image>
